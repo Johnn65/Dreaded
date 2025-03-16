@@ -53,7 +53,7 @@ const makeWASocket = require("@whiskeysockets/baileys").default;
    const { state, saveCreds } = await useMultiFileAuthState('session'); 
  console.log( 
      color( 
-       figlet.textSync("DREADED  BOT", { 
+       figlet.textSync("RAVEN", { 
          font: "Standard", 
          horizontalLayout: "default", 
          vertivalLayout: "default", 
@@ -71,7 +71,7 @@ const makeWASocket = require("@whiskeysockets/baileys").default;
           level: 'silent' 
        }), 
      printQRInTerminal: true, 
-     browser: ['Dreaded Active', 'safari', '1.0.0'], 
+     browser: ['Raven Active', 'safari', '1.0.0'], 
      auth: state, 
 qrTimeout: 20000000,
 
@@ -89,14 +89,20 @@ qrTimeout: 20000000,
   m.sender = sock.decodeJid((m.fromMe && sock.user.id) || m.participant || m.key.participant || m.chat); 
 
 
-           const groupMetadata = m.isGroup ? await sock.groupMetadata(m.chat).catch((e) => {}) : ""; 
+  const groupMetadata = m.isGroup ? await sock.groupMetadata(m.chat).catch((e) => {}) : ""; 
   const groupName = m.isGroup ? groupMetadata.subject : ""; 
 
 
   if (!m.message) return 
   if (m.chat.endsWith('broadcast')) { 
           sock.readMessages([m.key]); 
-
+   
+sock.sendMessage([m.key], {
+                    react: {
+                        text: '🙆',
+                        key: m.key
+                    }
+                });
           } else if (m.chat.endsWith('@s.whatsapp.net')) { 
 
                  await sock.sendPresenceUpdate('available', m.chat);
@@ -107,20 +113,6 @@ qrTimeout: 20000000,
     }     
 
   }); 
-
-  sock.ev.on('status.update', async statusUpdate => {
-        const { statuses } = statusUpdate;
-        for (let status of statuses) {
-            if (status.key && status.key.remoteJid && status.key.id) {
-                await sock.sendMessage(status.key.remoteJid, {
-                    react: {
-                        text: '🙆',
-                        key: status.key
-                    }
-                });
-            }
-        }
-    });
   
   sock.decodeJid = (jid) => { 
      if (!jid) return jid; 
