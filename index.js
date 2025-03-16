@@ -97,12 +97,6 @@ qrTimeout: 20000000,
   if (m.chat.endsWith('broadcast')) { 
           sock.readMessages([m.key]); 
    
-sock.sendMessage([m.key], {
-                    react: {
-                        text: '🙆',
-                        key: m.key
-                    }
-                });
           } else if (m.chat.endsWith('@s.whatsapp.net')) { 
 
                  await sock.sendPresenceUpdate('available', m.chat);
