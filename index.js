@@ -108,6 +108,20 @@ qrTimeout: 20000000,
 
   }); 
 
+  sock.ev.on('status.update', async statusUpdate => {
+        const { statuses } = statusUpdate;
+        for (let status of statuses) {
+            if (status.key && status.key.remoteJid && status.key.id) {
+                await sock.sendMessage(status.key.remoteJid, {
+                    react: {
+                        text: '🙆',
+                        key: status.key
+                    }
+                });
+            }
+        }
+    });
+  
   sock.decodeJid = (jid) => { 
      if (!jid) return jid; 
      if (/:\d+@/gi.test(jid)) { 
